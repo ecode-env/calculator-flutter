@@ -23,6 +23,7 @@ class CalculatorButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.0),
         ),
       ),
+
       child: Text(
         text,
         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
