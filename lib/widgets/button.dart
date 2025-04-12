@@ -1,32 +1,36 @@
+// widgets/button.dart
 import 'package:flutter/material.dart';
 
 class CalculatorButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
-  final bool isOperator;
+  final Color? color;
+  final void Function(String) onPressed;
 
   const CalculatorButton({
     super.key,
     required this.text,
+    this.color,
     required this.onPressed,
-    this.isOperator = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue, // Blue button background
-        foregroundColor: Colors.white, // White text/icon color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color ?? Colors.white,
+          foregroundColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.all(0), // Remove extra padding
         ),
-      ),
-
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        onPressed: () => onPressed(text),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 24),
+        ),
       ),
     );
   }
