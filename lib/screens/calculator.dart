@@ -1,3 +1,4 @@
+// screens/calculator.dart
 import 'package:flutter/material.dart';
 import '../utils/calculator_logic.dart';
 import '../widgets/button.dart';
@@ -6,134 +7,88 @@ class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
 
   @override
-  _CalculatorScreenState createState() => _CalculatorScreenState();
+  State<CalculatorScreen> createState() => _CalculatorScreenState();
 }
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
   String _display = '0';
   final CalculatorLogic _calculatorLogic = CalculatorLogic();
 
-  void _onButtonPressed(String value) {
+  void _onButtonPressed(String buttonText) {
     setState(() {
-      _display = _calculatorLogic.processInput(value, _display);
+      _display = _calculatorLogic.processInput(buttonText);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter Calculator'),
+      ),
       body: Column(
         children: [
-          // Display area
           Expanded(
-            flex: 2,
             child: Container(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(screenWidth * 0.04),
               alignment: Alignment.bottomRight,
               child: Text(
                 _display,
-                style: const TextStyle(
-                  fontSize: 48,
+                style: TextStyle(
+                  fontSize: screenWidth * 0.12,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
                 ),
               ),
             ),
           ),
-          // Button grid
-          Expanded(
-            flex: 4,
-            child: GridView.count(
-              crossAxisCount: 4,
-              padding: const EdgeInsets.all(8.0),
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-              children: [
-                CalculatorButton(
-                  text: 'C',
-                  onPressed: () => _onButtonPressed('C'),
-                  isOperator: true,
-                ),
-                CalculatorButton(
-                  text: '±',
-                  onPressed: () => _onButtonPressed('±'),
-                  isOperator: true,
-                ),
-                CalculatorButton(
-                  text: '%',
-                  onPressed: () => _onButtonPressed('%'),
-                  isOperator: true,
-                ),
-                CalculatorButton(
-                  text: '÷',
-                  onPressed: () => _onButtonPressed('÷'),
-                  isOperator: true,
-                ),
-                CalculatorButton(
-                  text: '7',
-                  onPressed: () => _onButtonPressed('7'),
-                ),
-                CalculatorButton(
-                  text: '8',
-                  onPressed: () => _onButtonPressed('8'),
-                ),
-                CalculatorButton(
-                  text: '9',
-                  onPressed: () => _onButtonPressed('9'),
-                ),
-                CalculatorButton(
-                  text: '×',
-                  onPressed: () => _onButtonPressed('×'),
-                  isOperator: true,
-                ),
-                CalculatorButton(
-                  text: '4',
-                  onPressed: () => _onButtonPressed('4'),
-                ),
-                CalculatorButton(
-                  text: '5',
-                  onPressed: () => _onButtonPressed('5'),
-                ),
-                CalculatorButton(
-                  text: '6',
-                  onPressed: () => _onButtonPressed('6'),
-                ),
-                CalculatorButton(
-                  text: '-',
-                  onPressed: () => _onButtonPressed('-'),
-                  isOperator: true,
-                ),
-                CalculatorButton(
-                  text: '1',
-                  onPressed: () => _onButtonPressed('1'),
-                ),
-                CalculatorButton(
-                  text: '2',
-                  onPressed: () => _onButtonPressed('2'),
-                ),
-                CalculatorButton(
-                  text: '3',
-                  onPressed: () => _onButtonPressed('3'),
-                ),
-                CalculatorButton(
-                  text: '+',
-                  onPressed: () => _onButtonPressed('+'),
-                  isOperator: true,
-                ),
-                CalculatorButton(
-                  text: '0',
-                  onPressed: () => _onButtonPressed('0'),
-                ),
-                CalculatorButton(
-                  text: '.',
-                  onPressed: () => _onButtonPressed('.'),
-                ),
-                CalculatorButton(
-                  text: '=',
-                  onPressed: () => _onButtonPressed('='),
-                  isOperator: true,
-                ),
-              ],
+          const Divider(),
+          SizedBox(
+            height: screenHeight * 0.5,
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                childAspectRatio: 1.2,
+              ),
+              itemCount: 18,
+              itemBuilder: (context, index) {
+                final buttonData = [
+                  {'text': 'C', 'color': Colors.blue, 'span': 1},
+                  {'text': '/', 'color': Colors.blue[100]!, 'span': 1},
+                  {'text': 'x', 'color': Colors.blue[100]!, 'span': 1},
+                  {'text': 'DEL', 'color': Colors.blue[100]!, 'span': 1},
+                  {'text': '7', 'color': Colors.white, 'span': 1},
+                  {'text': '8', 'color': Colors.white, 'span': 1},
+                  {'text': '9', 'color': Colors.white, 'span': 1},
+                  {'text': '+', 'color': Colors.blue[100]!, 'span': 1},
+                  {'text': '4', 'color': Colors.white, 'span': 1},
+                  {'text': '5', 'color': Colors.white, 'span': 1},
+                  {'text': '6', 'color': Colors.white, 'span': 1},
+                  {'text': '-', 'color': Colors.blue[100]!, 'span': 1},
+                  {'text': '1', 'color': Colors.white, 'span': 1},
+                  {'text': '2', 'color': Colors.white, 'span': 1},
+                  {'text': '3', 'color': Colors.white, 'span': 1},
+                  {'text': '=', 'color': Colors.blue, 'span': 2},
+                  {'text': '0', 'color': Colors.white, 'span': 1},
+                  {'text': '.', 'color': Colors.grey[300]!, 'span': 1},
+                ];
+
+                if (index == 16) {
+                  return const SizedBox();
+                }
+
+                final data = buttonData[index];
+                return GridTile(
+                  child: CalculatorButton(
+                    text: data['text'] as String,
+                    color: data['color'] as Color,
+                    onPressed: _onButtonPressed,
+                  ),
+                );
+              },
             ),
           ),
         ],
